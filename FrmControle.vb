@@ -5,7 +5,7 @@ Public Class FrmControle
     Private _idUser As Integer
     Private _nom As String
     Private _role As String
-    Private _typeMouvement As String = "SortieMission"
+    Private _modeSortie As Boolean = True
 
     Public Sub New(idUser As Integer, nom As String, role As String)
         InitializeComponent()
@@ -22,98 +22,19 @@ Public Class FrmControle
         ChargerJournal()
     End Sub
 
+    ' Design
     Private Sub AppliquerDesign()
         StylerGrille(dgvJournal)
         ResetVerifications()
-        ActiverMode("SortieMission")
     End Sub
 
-    ' Modes de mouvement
-    Private Sub ActiverMode(mode As String)
-        _typeMouvement = mode
-        ResetBoutonsModes()
-
-        Select Case mode
-            Case "SortieMission"
-                btnSortieMission.BackColor = Color.FromArgb(239, 68, 68)
-                btnSortieMission.ForeColor = Color.White
-                lblFormTitre.Text = "📋 Enregistrement — Sortie Mission"
-                txtNumMission.Enabled = True
-                ChargerVehicules()
-
-            Case "SortieMaintenance"
-                btnSortieMaint.BackColor = Color.FromArgb(245, 158, 11)
-                btnSortieMaint.ForeColor = Color.White
-                lblFormTitre.Text = "🔧 Enregistrement — Sortie Maintenance"
-                txtNumMission.Enabled = False
-                txtNumMission.Text = "— Maintenance —"
-                ChargerVehicules()
-
-            Case "RetourMission"
-                btnRetourMission.BackColor = Color.FromArgb(16, 185, 129)
-                btnRetourMission.ForeColor = Color.White
-                lblFormTitre.Text = "🟢 Enregistrement — Retour Mission"
-                txtNumMission.Enabled = True
-                ChargerVehicules()
-
-            Case "RetourMaintenance"
-                btnRetourMaint.BackColor = Color.FromArgb(26, 86, 219)
-                btnRetourMaint.ForeColor = Color.White
-                lblFormTitre.Text = "🔵 Enregistrement — Retour Maintenance"
-                txtNumMission.Enabled = False
-                txtNumMission.Text = "— Maintenance —"
-                ChargerVehicules()
-        End Select
-
-        ResetVerifications()
-    End Sub
-
-    Private Sub ResetBoutonsModes()
-        btnSortieMission.BackColor = Color.FromArgb(25, 35, 75)
-        btnSortieMaint.BackColor = Color.FromArgb(25, 35, 75)
-        btnRetourMission.BackColor = Color.FromArgb(25, 35, 75)
-        btnRetourMaint.BackColor = Color.FromArgb(25, 35, 75)
-        For Each btn As Button In {btnSortieMission, btnSortieMaint,
-                                    btnRetourMission, btnRetourMaint}
-            btn.ForeColor = Color.FromArgb(130, 155, 210)
-        Next
-    End Sub
-
-    Private Sub btnSortieMission_Click(sender As Object, e As EventArgs) Handles btnSortieMission.Click
-        ActiverMode("SortieMission")
-    End Sub
-
-    Private Sub btnSortieMaint_Click(sender As Object, e As EventArgs) Handles btnSortieMaint.Click
-        ActiverMode("SortieMaintenance")
-    End Sub
-
-    Private Sub btnRetourMission_Click(sender As Object, e As EventArgs) Handles btnRetourMission.Click
-        ActiverMode("RetourMission")
-    End Sub
-
-    Private Sub btnRetourMaint_Click(sender As Object, e As EventArgs) Handles btnRetourMaint.Click
-        ActiverMode("RetourMaintenance")
-    End Sub
-
-    ' Charger véhicules selon mode
+    ' Charger véhicules
     Private Sub ChargerVehicules()
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
-                Dim sql As String
-                Select Case _typeMouvement
-                    Case "SortieMission", "SortieMaintenance"
-                        sql = "SELECT id_vehicule, immatriculation FROM T_Vehicules " &
-                              "WHERE statut='Disponible'"
-                    Case "RetourMission"
-                        sql = "SELECT id_vehicule, immatriculation FROM T_Vehicules " &
-                              "WHERE statut='En_Mission'"
-                    Case "RetourMaintenance"
-                        sql = "SELECT id_vehicule, immatriculation FROM T_Vehicules " &
-                              "WHERE statut='Maintenance'"
-                    Case Else
-                        sql = "SELECT id_vehicule, immatriculation FROM T_Vehicules"
-                End Select
-
+                Dim sql As String = If(_modeSortie,
+                    "SELECT id_vehicule, immatriculation FROM T_Vehicules WHERE statut='Disponible'",
+                    "SELECT id_vehicule, immatriculation FROM T_Vehicules WHERE statut='En_Mission'")
                 Dim da As New OleDbDataAdapter(sql, conn)
                 Dim dt As New DataTable()
                 da.Fill(dt)
@@ -126,12 +47,12 @@ Public Class FrmControle
         End Try
     End Sub
 
+    ' Charger chauffeurs
     Private Sub ChargerChauffeurs()
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
                 Dim da As New OleDbDataAdapter(
-                    "SELECT id_chauffeur, nom_complet FROM T_Chauffeurs " &
-                    "WHERE statut='Actif'", conn)
+                    "SELECT id_chauffeur, nom_complet FROM T_Chauffeurs WHERE statut='Actif'", conn)
                 Dim dt As New DataTable()
                 da.Fill(dt)
                 cboChauffeur.DisplayMember = "nom_complet"
@@ -143,25 +64,24 @@ Public Class FrmControle
         End Try
     End Sub
 
-    ' Vérifications automatiques
+    ' Vérification automatique
     Private Sub cboVehicule_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboVehicule.SelectedIndexChanged
-        If cboVehicule.SelectedValue IsNot Nothing Then
-            VerifierVehicule(CInt(cboVehicule.SelectedValue))
-        End If
+        If cboVehicule.SelectedValue Is Nothing Then Exit Sub
+        VerifierVehicule(CInt(cboVehicule.SelectedValue))
     End Sub
 
     Private Sub cboChauffeur_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboChauffeur.SelectedIndexChanged
-        If cboChauffeur.SelectedValue IsNot Nothing Then
-            VerifierChauffeur(CInt(cboChauffeur.SelectedValue))
-        End If
+        If cboChauffeur.SelectedValue Is Nothing Then Exit Sub
+        VerifierChauffeur(CInt(cboChauffeur.SelectedValue))
     End Sub
 
     Private Sub txtNumMission_Leave(sender As Object, e As EventArgs) Handles txtNumMission.Leave
-        If txtNumMission.Enabled AndAlso txtNumMission.Text.Trim() <> "" Then
+        If txtNumMission.Text.Trim() <> "" Then
             VerifierMission(txtNumMission.Text.Trim())
         End If
     End Sub
 
+    ' Vérifier véhicule
     Private Sub VerifierVehicule(idVeh As Integer)
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
@@ -170,79 +90,95 @@ Public Class FrmControle
                     "FROM T_Vehicules WHERE id_vehicule=?", conn)
                 cmd.Parameters.AddWithValue("?", idVeh)
                 Dim dr As OleDbDataReader = cmd.ExecuteReader()
+
                 If dr.Read() Then
+                    ' Assurance
                     If Not IsDBNull(dr("date_assurance")) Then
-                        Dim d As DateTime = CDate(dr("date_assurance"))
-                        SetCheck(lblAssurance, d >= DateTime.Today,
-                                 If(d >= DateTime.Today,
-                                    "✅ Assurance valide — exp. " & d.ToString("dd/MM/yyyy"),
-                                    "❌ Assurance EXPIRÉE le " & d.ToString("dd/MM/yyyy")))
+                        Dim dateAss As DateTime = CDate(dr("date_assurance"))
+                        If dateAss >= DateTime.Today Then
+                            SetCheck(lblAssurance, True, "✅ Assurance valide — exp. " & dateAss.ToString("dd/MM/yyyy"))
+                        Else
+                            SetCheck(lblAssurance, False, "❌ Assurance EXPIRÉE le " & dateAss.ToString("dd/MM/yyyy"))
+                        End If
                     End If
+
+                    ' Visite technique
                     If Not IsDBNull(dr("date_visite_technique")) Then
-                        Dim d As DateTime = CDate(dr("date_visite_technique"))
-                        SetCheck(lblVisite, d >= DateTime.Today,
-                                 If(d >= DateTime.Today,
-                                    "✅ Visite technique valide — exp. " & d.ToString("dd/MM/yyyy"),
-                                    "❌ Visite technique EXPIRÉE"))
+                        Dim dateVT As DateTime = CDate(dr("date_visite_technique"))
+                        If dateVT >= DateTime.Today Then
+                            SetCheck(lblVisite, True, "✅ Visite technique valide — exp. " & dateVT.ToString("dd/MM/yyyy"))
+                        Else
+                            SetCheck(lblVisite, False, "❌ Visite technique EXPIRÉE")
+                        End If
                     End If
+
+                    ' Statut
                     Dim statut As String = dr("statut").ToString()
-                    SetCheck(lblStatutVeh, statut = "Disponible",
-                             If(statut = "Disponible", "✅ Véhicule Disponible",
-                                "❌ Véhicule : " & statut))
+                    If statut = "Disponible" Then
+                        SetCheck(lblStatutVeh, True, "✅ Véhicule Disponible")
+                    Else
+                        SetCheck(lblStatutVeh, False, "❌ Véhicule : " & statut)
+                    End If
                 End If
                 dr.Close()
             End Using
             MettreAJourResultat()
         Catch ex As Exception
+            MessageBox.Show("Erreur vérif. véhicule : " & ex.Message)
         End Try
     End Sub
 
+    ' Vérifier chauffeur
     Private Sub VerifierChauffeur(idChauf As Integer)
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
                 Dim cmd As New OleDbCommand(
-                    "SELECT statut, date_expiration_permis FROM T_Chauffeurs " &
-                    "WHERE id_chauffeur=?", conn)
+                    "SELECT statut, date_expiration_permis FROM T_Chauffeurs WHERE id_chauffeur=?", conn)
                 cmd.Parameters.AddWithValue("?", idChauf)
                 Dim dr As OleDbDataReader = cmd.ExecuteReader()
+
                 If dr.Read() Then
                     If Not IsDBNull(dr("date_expiration_permis")) Then
-                        Dim d As DateTime = CDate(dr("date_expiration_permis"))
-                        SetCheck(lblPermis, d >= DateTime.Today,
-                                 If(d >= DateTime.Today,
-                                    "✅ Permis valide — exp. " & d.ToString("dd/MM/yyyy"),
-                                    "❌ Permis EXPIRÉ le " & d.ToString("dd/MM/yyyy")))
+                        Dim datePerm As DateTime = CDate(dr("date_expiration_permis"))
+                        If datePerm >= DateTime.Today Then
+                            SetCheck(lblPermis, True, "✅ Permis valide — exp. " & datePerm.ToString("dd/MM/yyyy"))
+                        Else
+                            SetCheck(lblPermis, False, "❌ Permis EXPIRÉ le " & datePerm.ToString("dd/MM/yyyy"))
+                        End If
                     End If
+
                     Dim statut As String = dr("statut").ToString()
-                    SetCheck(lblStatutChauf, statut = "Actif",
-                             If(statut = "Actif", "✅ Chauffeur Actif",
-                                "❌ Chauffeur : " & statut))
+                    If statut = "Actif" Then
+                        SetCheck(lblStatutChauf, True, "✅ Chauffeur Actif")
+                    Else
+                        SetCheck(lblStatutChauf, False, "❌ Chauffeur : " & statut)
+                    End If
                 End If
                 dr.Close()
             End Using
             MettreAJourResultat()
         Catch ex As Exception
+            MessageBox.Show("Erreur vérif. chauffeur : " & ex.Message)
         End Try
     End Sub
 
+    ' Vérifier mission
     Private Sub VerifierMission(numMission As String)
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
                 Dim cmd As New OleDbCommand(
-                    "SELECT statut, destination FROM T_Missions " &
-                    "WHERE numero_mission=?", conn)
+                    "SELECT statut, destination FROM T_Missions WHERE numero_mission=?", conn)
                 cmd.Parameters.AddWithValue("?", numMission)
                 Dim dr As OleDbDataReader = cmd.ExecuteReader()
+
                 If dr.Read() Then
                     Dim statut As String = dr("statut").ToString()
                     Dim dest As String = dr("destination").ToString()
-                    SetCheck(lblMissionOk,
-                             statut = "Validee" Or statut = "En_Cours" Or statut = "En_Attente",
-                             If(statut = "Validee" Or statut = "En_Attente",
-                                "✅ Mission validée → " & dest,
-                                If(statut = "En_Cours",
-                                   "✅ Mission en cours → " & dest,
-                                   "❌ Mission non autorisée (" & statut & ")")))
+                    If statut = "Validee" Or statut = "En_Cours" Then
+                        SetCheck(lblMissionOk, True, "✅ Mission validée → " & dest)
+                    Else
+                        SetCheck(lblMissionOk, False, "❌ Mission non validée (" & statut & ")")
+                    End If
                 Else
                     SetCheck(lblMissionOk, False, "❌ Mission introuvable")
                 End If
@@ -250,26 +186,28 @@ Public Class FrmControle
             End Using
             MettreAJourResultat()
         Catch ex As Exception
+            MessageBox.Show("Erreur vérif. mission : " & ex.Message)
         End Try
     End Sub
 
+    ' Afficher check
     Private Sub SetCheck(lbl As Label, ok As Boolean, texte As String)
         lbl.Text = texte
         lbl.ForeColor = If(ok, Color.FromArgb(16, 185, 129), Color.FromArgb(239, 68, 68))
     End Sub
 
+    ' Mettre à jour résultat global
     Private Sub MettreAJourResultat()
-        Dim vert As Color = Color.FromArgb(16, 185, 129)
         Dim toutOk As Boolean =
-            lblAssurance.ForeColor = vert AndAlso
-            lblVisite.ForeColor = vert AndAlso
-            lblStatutVeh.ForeColor = vert AndAlso
-            lblPermis.ForeColor = vert AndAlso
-            lblStatutChauf.ForeColor = vert
+            lblAssurance.ForeColor = Color.FromArgb(16, 185, 129) AndAlso
+            lblVisite.ForeColor = Color.FromArgb(16, 185, 129) AndAlso
+            lblStatutVeh.ForeColor = Color.FromArgb(16, 185, 129) AndAlso
+            lblPermis.ForeColor = Color.FromArgb(16, 185, 129) AndAlso
+            lblStatutChauf.ForeColor = Color.FromArgb(16, 185, 129)
 
         If toutOk Then
             pnlResultat.BackColor = Color.FromArgb(15, 40, 30)
-            lblResultat.ForeColor = vert
+            lblResultat.ForeColor = Color.FromArgb(16, 185, 129)
             lblResultat.Text = "🟢 AUTORISATION ACCORDÉE"
         Else
             pnlResultat.BackColor = Color.FromArgb(40, 15, 15)
@@ -278,99 +216,115 @@ Public Class FrmControle
         End If
     End Sub
 
+    ' Reset vérifications
     Private Sub ResetVerifications()
-        Dim gris As Color = Color.FromArgb(130, 155, 210)
-        For Each lbl As Label In {lblAssurance, lblVisite, lblStatutVeh,
-                                   lblPermis, lblStatutChauf, lblMissionOk}
-            lbl.ForeColor = gris
-            lbl.Text = lbl.Text.Split("—")(0).Trim() & " —"
+        Dim labels = {lblAssurance, lblVisite, lblStatutVeh, lblPermis, lblStatutChauf, lblMissionOk}
+        For Each lbl In labels
+            lbl.ForeColor = Color.FromArgb(130, 155, 210)
         Next
         pnlResultat.BackColor = Color.FromArgb(25, 35, 75)
-        lblResultat.ForeColor = gris
+        lblResultat.ForeColor = Color.FromArgb(130, 155, 210)
         lblResultat.Text = "En attente de vérification..."
     End Sub
 
-    ' Valider le mouvement
-    Private Sub btnValider_Click(sender As Object, e As EventArgs) Handles btnValider.Click
-        If cboVehicule.SelectedValue Is Nothing OrElse txtKm.Text.Trim() = "" Then
-            MessageBox.Show("Véhicule et Km sont obligatoires.",
-                            "Champs requis", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
+    ' Onglets Sortie / Retour
+    Private Sub btnOngletSortie_Click(sender As Object, e As EventArgs) Handles btnOngletSortie.Click
+        _modeSortie = True
+        btnOngletSortie.BackColor = Color.FromArgb(239, 68, 68)
+        btnOngletSortie.ForeColor = Color.White
+        btnOngletRetour.BackColor = Color.FromArgb(25, 35, 75)
+        btnOngletRetour.ForeColor = Color.FromArgb(130, 155, 210)
+        btnValider.Text = "✅ Valider la Sortie"
+        btnValider.BackColor = Color.FromArgb(239, 68, 68)
+        ResetVerifications()
+        ChargerVehicules()
+    End Sub
 
-        If txtNumMission.Enabled AndAlso txtNumMission.Text.Trim() = "" Then
-            MessageBox.Show("Le N° de mission est obligatoire.",
+    Private Sub btnOngletRetour_Click(sender As Object, e As EventArgs) Handles btnOngletRetour.Click
+        _modeSortie = False
+        btnOngletRetour.BackColor = Color.FromArgb(16, 185, 129)
+        btnOngletRetour.ForeColor = Color.White
+        btnOngletSortie.BackColor = Color.FromArgb(25, 35, 75)
+        btnOngletSortie.ForeColor = Color.FromArgb(130, 155, 210)
+        btnValider.Text = "✅ Valider le Retour"
+        btnValider.BackColor = Color.FromArgb(16, 185, 129)
+        ResetVerifications()
+        ChargerVehicules()
+    End Sub
+
+    ' Valider sortie ou retour
+    Private Sub btnValider_Click(sender As Object, e As EventArgs) Handles btnValider.Click
+        If txtNumMission.Text.Trim() = "" OrElse
+           cboVehicule.SelectedValue Is Nothing OrElse
+           txtKm.Text.Trim() = "" Then
+            MessageBox.Show("Veuillez remplir : N° Mission, Véhicule et Km.",
                             "Champs requis", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
         Dim km As Integer
         If Not Integer.TryParse(txtKm.Text.Replace(" ", ""), km) Then
-            MessageBox.Show("Km invalide.", "Erreur",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Le kilométrage doit être un nombre entier.",
+                            "Valeur invalide", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
-                Dim idVehicule As Integer = CInt(cboVehicule.SelectedValue)
+                ' Trouver id_mission
+                Dim cmdMission As New OleDbCommand(
+                    "SELECT id_mission FROM T_Missions WHERE numero_mission=?", conn)
+                cmdMission.Parameters.AddWithValue("?", txtNumMission.Text.Trim())
+                Dim idMission As Object = cmdMission.ExecuteScalar()
 
-                Select Case _typeMouvement
+                If idMission Is Nothing Then
+                    MessageBox.Show("Mission introuvable !", "Erreur",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Exit Sub
+                End If
 
-                    Case "SortieMission"
-                        Dim idMission As Object = GetIdMission(txtNumMission.Text.Trim(), conn)
-                        If idMission Is Nothing Then
-                            MessageBox.Show("Mission introuvable !")
-                            Exit Sub
-                        End If
-                        InsererMouvement(CInt(idMission), "Sortie", km,
-                                         txtObservation.Text, conn)
-                        UpdateMission(CInt(idMission), "En_Cours", conn)
-                        UpdateVehicule(idVehicule, "En_Mission", km, conn)
-                        MessageBox.Show("✅ Sortie Mission enregistrée !")
+                Dim typeMvt As String = If(_modeSortie, "Sortie", "Retour")
 
-                    Case "SortieMaintenance"
-                        ' Trouver la maintenance planifiée pour ce véhicule
-                        Dim idMaint As Object = GetIdMaintenance(idVehicule, conn)
-                        If idMaint IsNot Nothing Then
-                            Dim cmd As New OleDbCommand(
-                                "UPDATE T_Maintenance SET statut='En_Cours' " &
-                                "WHERE id_maintenance=?", conn)
-                            cmd.Parameters.AddWithValue("?", CInt(idMaint))
-                            cmd.ExecuteNonQuery()
-                        End If
-                        ' Créer un mouvement fictif lié à maintenance
-                        InsererMouvementLibre("Sortie_Maint", idVehicule, km,
-                                              txtObservation.Text, conn)
-                        UpdateVehicule(idVehicule, "Maintenance", km, conn)
-                        MessageBox.Show("✅ Sortie Maintenance enregistrée !")
+                ' Enregistrer mouvement
+                Dim cmdMvt As New OleDbCommand(
+                    "INSERT INTO T_Mouvements " &
+                    "(id_mission, type_mouvement, date_heure, km_releve, observation, id_agent) " &
+                    "VALUES (?, ?, ?, ?, ?, ?)", conn)
+                cmdMvt.Parameters.AddWithValue("?", CInt(idMission))
+                cmdMvt.Parameters.AddWithValue("?", typeMvt)
+                cmdMvt.Parameters.AddWithValue("?", DateTime.Now)
+                cmdMvt.Parameters.AddWithValue("?", km)
+                cmdMvt.Parameters.AddWithValue("?", txtObservation.Text)
+                cmdMvt.Parameters.AddWithValue("?", _idUser)
+                cmdMvt.ExecuteNonQuery()
 
-                    Case "RetourMission"
-                        Dim idMission As Object = GetIdMission(txtNumMission.Text.Trim(), conn)
-                        If idMission Is Nothing Then
-                            MessageBox.Show("Mission introuvable !")
-                            Exit Sub
-                        End If
-                        InsererMouvement(CInt(idMission), "Retour", km,
-                                         txtObservation.Text, conn)
-                        UpdateMission(CInt(idMission), "Terminee", conn)
-                        UpdateVehicule(idVehicule, "Disponible", km, conn)
-                        MessageBox.Show("✅ Retour Mission enregistré !")
+                ' Mettre à jour statut mission et véhicule
+                If _modeSortie Then
+                    Dim cmdM As New OleDbCommand(
+                        "UPDATE T_Missions SET statut='En_Cours' WHERE id_mission=?", conn)
+                    cmdM.Parameters.AddWithValue("?", CInt(idMission))
+                    cmdM.ExecuteNonQuery()
 
-                    Case "RetourMaintenance"
-                        Dim idMaint As Object = GetIdMaintenance(idVehicule, conn)
-                        If idMaint IsNot Nothing Then
-                            Dim cmd As New OleDbCommand(
-                                "UPDATE T_Maintenance SET statut='Terminee', " &
-                                "date_sortie_reelle=Now() WHERE id_maintenance=?", conn)
-                            cmd.Parameters.AddWithValue("?", CInt(idMaint))
-                            cmd.ExecuteNonQuery()
-                        End If
-                        InsererMouvementLibre("Retour_Maint", idVehicule, km,
-                                              txtObservation.Text, conn)
-                        UpdateVehicule(idVehicule, "Disponible", km, conn)
-                        MessageBox.Show("✅ Retour Maintenance enregistré !")
-                End Select
+                    Dim cmdV As New OleDbCommand(
+                        "UPDATE T_Vehicules SET statut='En_Mission', km_actuel=? WHERE id_vehicule=?", conn)
+                    cmdV.Parameters.AddWithValue("?", km)
+                    cmdV.Parameters.AddWithValue("?", CInt(cboVehicule.SelectedValue))
+                    cmdV.ExecuteNonQuery()
+                Else
+                    Dim cmdM As New OleDbCommand(
+                        "UPDATE T_Missions SET statut='Terminee' WHERE id_mission=?", conn)
+                    cmdM.Parameters.AddWithValue("?", CInt(idMission))
+                    cmdM.ExecuteNonQuery()
+
+                    Dim cmdV As New OleDbCommand(
+                        "UPDATE T_Vehicules SET statut='Disponible', km_actuel=? WHERE id_vehicule=?", conn)
+                    cmdV.Parameters.AddWithValue("?", km)
+                    cmdV.Parameters.AddWithValue("?", CInt(cboVehicule.SelectedValue))
+                    cmdV.ExecuteNonQuery()
+                End If
+
+                MessageBox.Show("✅ " & typeMvt & " enregistrée avec succès !",
+                                "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
                 ' Réinitialiser
                 txtNumMission.Clear()
@@ -384,76 +338,6 @@ Public Class FrmControle
             MessageBox.Show("Erreur : " & ex.Message,
                             "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
-
-    Private Function GetIdMission(numMission As String,
-                                   conn As OleDbConnection) As Object
-        Dim cmd As New OleDbCommand(
-            "SELECT id_mission FROM T_Missions WHERE numero_mission=?", conn)
-        cmd.Parameters.AddWithValue("?", numMission)
-        Dim result As Object = cmd.ExecuteScalar()
-        Return If(result Is DBNull.Value, Nothing, result)
-    End Function
-
-    Private Function GetIdMaintenance(idVehicule As Integer,
-                                       conn As OleDbConnection) As Object
-        Dim cmd As New OleDbCommand(
-            "SELECT id_maintenance FROM T_Maintenance " &
-            "WHERE id_vehicule=? AND statut IN ('Planifiee','En_Cours') " &
-            "ORDER BY date_entree DESC", conn)
-        cmd.Parameters.AddWithValue("?", idVehicule)
-        Dim result As Object = cmd.ExecuteScalar()
-        Return If(result Is DBNull.Value, Nothing, result)
-    End Function
-
-    Private Sub InsererMouvement(idMission As Integer, typeMvt As String,
-                                  km As Integer, obs As String,
-                                  conn As OleDbConnection)
-        Dim cmd As New OleDbCommand(
-            "INSERT INTO T_Mouvements " &
-            "(id_mission, type_mouvement, date_heure, km_releve, observation, id_agent) " &
-            "VALUES (?, ?, ?, ?, ?, ?)", conn)
-        cmd.Parameters.AddWithValue("?", idMission)
-        cmd.Parameters.AddWithValue("?", typeMvt)
-        cmd.Parameters.AddWithValue("?", DateTime.Now)
-        cmd.Parameters.AddWithValue("?", km)
-        cmd.Parameters.AddWithValue("?", obs)
-        cmd.Parameters.AddWithValue("?", _idUser)
-        cmd.ExecuteNonQuery()
-    End Sub
-
-    Private Sub InsererMouvementLibre(typeMvt As String, idVehicule As Integer,
-                                       km As Integer, obs As String,
-                                       conn As OleDbConnection)
-        Dim cmd As New OleDbCommand(
-            "INSERT INTO T_Mouvements " &
-            "(id_mission, type_mouvement, date_heure, km_releve, observation, id_agent) " &
-            "VALUES (0, ?, ?, ?, ?, ?)", conn)
-        cmd.Parameters.AddWithValue("?", typeMvt)
-        cmd.Parameters.AddWithValue("?", DateTime.Now)
-        cmd.Parameters.AddWithValue("?", km)
-        cmd.Parameters.AddWithValue("?", obs)
-        cmd.Parameters.AddWithValue("?", _idUser)
-        cmd.ExecuteNonQuery()
-    End Sub
-
-    Private Sub UpdateMission(idMission As Integer, statut As String,
-                               conn As OleDbConnection)
-        Dim cmd As New OleDbCommand(
-            "UPDATE T_Missions SET statut=? WHERE id_mission=?", conn)
-        cmd.Parameters.AddWithValue("?", statut)
-        cmd.Parameters.AddWithValue("?", idMission)
-        cmd.ExecuteNonQuery()
-    End Sub
-
-    Private Sub UpdateVehicule(idVehicule As Integer, statut As String,
-                                km As Integer, conn As OleDbConnection)
-        Dim cmd As New OleDbCommand(
-            "UPDATE T_Vehicules SET statut=?, km_actuel=? WHERE id_vehicule=?", conn)
-        cmd.Parameters.AddWithValue("?", statut)
-        cmd.Parameters.AddWithValue("?", km)
-        cmd.Parameters.AddWithValue("?", idVehicule)
-        cmd.ExecuteNonQuery()
     End Sub
 
     ' Journal du jour
@@ -481,10 +365,10 @@ Public Class FrmControle
                 dgvJournal.DataSource = dt
                 StylerGrille(dgvJournal)
 
+                ' Colorier Sortie/Retour
                 For Each row As DataGridViewRow In dgvJournal.Rows
                     If Not row.IsNewRow Then
-                        Dim t As String = row.Cells("Type").Value.ToString()
-                        If t.Contains("Sortie") Then
+                        If row.Cells("Type").Value.ToString() = "Sortie" Then
                             row.Cells("Type").Style.ForeColor = Color.FromArgb(239, 68, 68)
                         Else
                             row.Cells("Type").Style.ForeColor = Color.FromArgb(16, 185, 129)
@@ -509,6 +393,7 @@ Public Class FrmControle
         End If
     End Sub
 
+    ' Style grille
     Private Sub StylerGrille(dgv As DataGridView)
         dgv.EnableHeadersVisualStyles = False
         dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(26, 86, 219)
@@ -522,6 +407,7 @@ Public Class FrmControle
         dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(26, 86, 219)
         dgv.DefaultCellStyle.SelectionForeColor = Color.White
         dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(22, 30, 65)
+        dgv.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(210, 220, 240)
         dgv.BackgroundColor = Color.FromArgb(18, 25, 55)
         dgv.BorderStyle = BorderStyle.None
         dgv.GridColor = Color.FromArgb(30, 40, 80)

@@ -27,8 +27,6 @@ Partial Class FrmControle
         Me.lblAgent = New System.Windows.Forms.Label()
         Me.lblTitre = New System.Windows.Forms.Label()
         Me.pnlForm = New System.Windows.Forms.Panel()
-        Me.btnRetourMaint = New System.Windows.Forms.Button()
-        Me.btnRetourMission = New System.Windows.Forms.Button()
         Me.btnValider = New System.Windows.Forms.Button()
         Me.txtObservation = New System.Windows.Forms.TextBox()
         Me.lbl5 = New System.Windows.Forms.Label()
@@ -41,8 +39,8 @@ Partial Class FrmControle
         Me.txtNumMission = New System.Windows.Forms.TextBox()
         Me.lbl1 = New System.Windows.Forms.Label()
         Me.pnlOnglets = New System.Windows.Forms.Panel()
-        Me.btnSortieMaint = New System.Windows.Forms.Button()
-        Me.btnSortieMission = New System.Windows.Forms.Button()
+        Me.btnOngletRetour = New System.Windows.Forms.Button()
+        Me.btnOngletSortie = New System.Windows.Forms.Button()
         Me.lblFormTitre = New System.Windows.Forms.Label()
         Me.pnlVerif = New System.Windows.Forms.Panel()
         Me.pnlResultat = New System.Windows.Forms.Panel()
@@ -120,8 +118,6 @@ Partial Class FrmControle
         'pnlForm
         '
         Me.pnlForm.BackColor = System.Drawing.Color.FromArgb(CType(CType(18, Byte), Integer), CType(CType(25, Byte), Integer), CType(CType(55, Byte), Integer))
-        Me.pnlForm.Controls.Add(Me.btnRetourMaint)
-        Me.pnlForm.Controls.Add(Me.btnRetourMission)
         Me.pnlForm.Controls.Add(Me.btnValider)
         Me.pnlForm.Controls.Add(Me.txtObservation)
         Me.pnlForm.Controls.Add(Me.lbl5)
@@ -141,36 +137,6 @@ Partial Class FrmControle
         Me.pnlForm.Size = New System.Drawing.Size(380, 567)
         Me.pnlForm.TabIndex = 1
         '
-        'btnRetourMaint
-        '
-        Me.btnRetourMaint.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(35, Byte), Integer), CType(CType(75, Byte), Integer))
-        Me.btnRetourMaint.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnRetourMaint.FlatAppearance.BorderSize = 0
-        Me.btnRetourMaint.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnRetourMaint.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnRetourMaint.ForeColor = System.Drawing.Color.FromArgb(CType(CType(130, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(210, Byte), Integer))
-        Me.btnRetourMaint.Location = New System.Drawing.Point(185, 99)
-        Me.btnRetourMaint.Name = "btnRetourMaint"
-        Me.btnRetourMaint.Size = New System.Drawing.Size(165, 38)
-        Me.btnRetourMaint.TabIndex = 13
-        Me.btnRetourMaint.Text = "🔵 Retour Maintenance"
-        Me.btnRetourMaint.UseVisualStyleBackColor = False
-        '
-        'btnRetourMission
-        '
-        Me.btnRetourMission.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(35, Byte), Integer), CType(CType(75, Byte), Integer))
-        Me.btnRetourMission.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnRetourMission.FlatAppearance.BorderSize = 0
-        Me.btnRetourMission.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnRetourMission.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnRetourMission.ForeColor = System.Drawing.Color.White
-        Me.btnRetourMission.Location = New System.Drawing.Point(20, 99)
-        Me.btnRetourMission.Name = "btnRetourMission"
-        Me.btnRetourMission.Size = New System.Drawing.Size(160, 38)
-        Me.btnRetourMission.TabIndex = 2
-        Me.btnRetourMission.Text = "🟢 Retour Mission"
-        Me.btnRetourMission.UseVisualStyleBackColor = False
-        '
         'btnValider
         '
         Me.btnValider.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(86, Byte), Integer), CType(CType(219, Byte), Integer))
@@ -179,7 +145,7 @@ Partial Class FrmControle
         Me.btnValider.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnValider.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnValider.ForeColor = System.Drawing.Color.White
-        Me.btnValider.Location = New System.Drawing.Point(20, 491)
+        Me.btnValider.Location = New System.Drawing.Point(20, 445)
         Me.btnValider.Name = "btnValider"
         Me.btnValider.Size = New System.Drawing.Size(330, 45)
         Me.btnValider.TabIndex = 12
@@ -188,7 +154,7 @@ Partial Class FrmControle
         '
         'txtObservation
         '
-        Me.txtObservation.Location = New System.Drawing.Point(20, 436)
+        Me.txtObservation.Location = New System.Drawing.Point(20, 390)
         Me.txtObservation.Name = "txtObservation"
         Me.txtObservation.Size = New System.Drawing.Size(330, 20)
         Me.txtObservation.TabIndex = 11
@@ -198,7 +164,7 @@ Partial Class FrmControle
         Me.lbl5.AutoSize = True
         Me.lbl5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.lbl5.Location = New System.Drawing.Point(20, 416)
+        Me.lbl5.Location = New System.Drawing.Point(20, 370)
         Me.lbl5.Name = "lbl5"
         Me.lbl5.Size = New System.Drawing.Size(71, 15)
         Me.lbl5.TabIndex = 10
@@ -206,7 +172,7 @@ Partial Class FrmControle
         '
         'txtKm
         '
-        Me.txtKm.Location = New System.Drawing.Point(20, 371)
+        Me.txtKm.Location = New System.Drawing.Point(20, 325)
         Me.txtKm.Name = "txtKm"
         Me.txtKm.Size = New System.Drawing.Size(330, 20)
         Me.txtKm.TabIndex = 9
@@ -216,7 +182,7 @@ Partial Class FrmControle
         Me.lbl4.AutoSize = True
         Me.lbl4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.lbl4.Location = New System.Drawing.Point(20, 351)
+        Me.lbl4.Location = New System.Drawing.Point(20, 305)
         Me.lbl4.Name = "lbl4"
         Me.lbl4.Size = New System.Drawing.Size(62, 15)
         Me.lbl4.TabIndex = 8
@@ -225,7 +191,7 @@ Partial Class FrmControle
         'cboChauffeur
         '
         Me.cboChauffeur.FormattingEnabled = True
-        Me.cboChauffeur.Location = New System.Drawing.Point(20, 306)
+        Me.cboChauffeur.Location = New System.Drawing.Point(20, 260)
         Me.cboChauffeur.Name = "cboChauffeur"
         Me.cboChauffeur.Size = New System.Drawing.Size(330, 21)
         Me.cboChauffeur.TabIndex = 7
@@ -235,7 +201,7 @@ Partial Class FrmControle
         Me.lbl3.AutoSize = True
         Me.lbl3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.lbl3.Location = New System.Drawing.Point(20, 286)
+        Me.lbl3.Location = New System.Drawing.Point(20, 240)
         Me.lbl3.Name = "lbl3"
         Me.lbl3.Size = New System.Drawing.Size(60, 15)
         Me.lbl3.TabIndex = 6
@@ -244,7 +210,7 @@ Partial Class FrmControle
         'cboVehicule
         '
         Me.cboVehicule.FormattingEnabled = True
-        Me.cboVehicule.Location = New System.Drawing.Point(20, 241)
+        Me.cboVehicule.Location = New System.Drawing.Point(20, 195)
         Me.cboVehicule.Name = "cboVehicule"
         Me.cboVehicule.Size = New System.Drawing.Size(330, 21)
         Me.cboVehicule.TabIndex = 5
@@ -254,7 +220,7 @@ Partial Class FrmControle
         Me.lbl2.AutoSize = True
         Me.lbl2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.lbl2.Location = New System.Drawing.Point(20, 221)
+        Me.lbl2.Location = New System.Drawing.Point(20, 175)
         Me.lbl2.Name = "lbl2"
         Me.lbl2.Size = New System.Drawing.Size(139, 15)
         Me.lbl2.TabIndex = 4
@@ -262,7 +228,7 @@ Partial Class FrmControle
         '
         'txtNumMission
         '
-        Me.txtNumMission.Location = New System.Drawing.Point(20, 176)
+        Me.txtNumMission.Location = New System.Drawing.Point(20, 130)
         Me.txtNumMission.Name = "txtNumMission"
         Me.txtNumMission.Size = New System.Drawing.Size(330, 20)
         Me.txtNumMission.TabIndex = 3
@@ -272,7 +238,7 @@ Partial Class FrmControle
         Me.lbl1.AutoSize = True
         Me.lbl1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(150, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.lbl1.Location = New System.Drawing.Point(20, 156)
+        Me.lbl1.Location = New System.Drawing.Point(20, 110)
         Me.lbl1.Name = "lbl1"
         Me.lbl1.Size = New System.Drawing.Size(114, 15)
         Me.lbl1.TabIndex = 2
@@ -280,42 +246,42 @@ Partial Class FrmControle
         '
         'pnlOnglets
         '
-        Me.pnlOnglets.Controls.Add(Me.btnSortieMaint)
-        Me.pnlOnglets.Controls.Add(Me.btnSortieMission)
+        Me.pnlOnglets.Controls.Add(Me.btnOngletRetour)
+        Me.pnlOnglets.Controls.Add(Me.btnOngletSortie)
         Me.pnlOnglets.Location = New System.Drawing.Point(20, 55)
         Me.pnlOnglets.Name = "pnlOnglets"
-        Me.pnlOnglets.Size = New System.Drawing.Size(330, 82)
+        Me.pnlOnglets.Size = New System.Drawing.Size(330, 40)
         Me.pnlOnglets.TabIndex = 1
         '
-        'btnSortieMaint
+        'btnOngletRetour
         '
-        Me.btnSortieMaint.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(158, Byte), Integer), CType(CType(11, Byte), Integer))
-        Me.btnSortieMaint.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnSortieMaint.FlatAppearance.BorderSize = 0
-        Me.btnSortieMaint.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSortieMaint.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSortieMaint.ForeColor = System.Drawing.SystemColors.Window
-        Me.btnSortieMaint.Location = New System.Drawing.Point(165, 0)
-        Me.btnSortieMaint.Name = "btnSortieMaint"
-        Me.btnSortieMaint.Size = New System.Drawing.Size(165, 38)
-        Me.btnSortieMaint.TabIndex = 1
-        Me.btnSortieMaint.Text = "🔧 Sortie Maintenance"
-        Me.btnSortieMaint.UseVisualStyleBackColor = False
+        Me.btnOngletRetour.BackColor = System.Drawing.Color.FromArgb(CType(CType(25, Byte), Integer), CType(CType(35, Byte), Integer), CType(CType(75, Byte), Integer))
+        Me.btnOngletRetour.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnOngletRetour.FlatAppearance.BorderSize = 0
+        Me.btnOngletRetour.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnOngletRetour.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnOngletRetour.ForeColor = System.Drawing.Color.FromArgb(CType(CType(130, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(210, Byte), Integer))
+        Me.btnOngletRetour.Location = New System.Drawing.Point(165, 0)
+        Me.btnOngletRetour.Name = "btnOngletRetour"
+        Me.btnOngletRetour.Size = New System.Drawing.Size(165, 40)
+        Me.btnOngletRetour.TabIndex = 13
+        Me.btnOngletRetour.Text = "🟢 Retour Véhicule"
+        Me.btnOngletRetour.UseVisualStyleBackColor = False
         '
-        'btnSortieMission
+        'btnOngletSortie
         '
-        Me.btnSortieMission.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(68, Byte), Integer), CType(CType(68, Byte), Integer))
-        Me.btnSortieMission.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnSortieMission.FlatAppearance.BorderSize = 0
-        Me.btnSortieMission.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnSortieMission.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSortieMission.ForeColor = System.Drawing.Color.White
-        Me.btnSortieMission.Location = New System.Drawing.Point(0, 0)
-        Me.btnSortieMission.Name = "btnSortieMission"
-        Me.btnSortieMission.Size = New System.Drawing.Size(160, 38)
-        Me.btnSortieMission.TabIndex = 0
-        Me.btnSortieMission.Text = "🔴 Sortie Mission"
-        Me.btnSortieMission.UseVisualStyleBackColor = False
+        Me.btnOngletSortie.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(68, Byte), Integer), CType(CType(68, Byte), Integer))
+        Me.btnOngletSortie.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnOngletSortie.FlatAppearance.BorderSize = 0
+        Me.btnOngletSortie.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnOngletSortie.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnOngletSortie.ForeColor = System.Drawing.Color.White
+        Me.btnOngletSortie.Location = New System.Drawing.Point(0, 0)
+        Me.btnOngletSortie.Name = "btnOngletSortie"
+        Me.btnOngletSortie.Size = New System.Drawing.Size(165, 40)
+        Me.btnOngletSortie.TabIndex = 0
+        Me.btnOngletSortie.Text = "🔴 Sortie Véhicule"
+        Me.btnOngletSortie.UseVisualStyleBackColor = False
         '
         'lblFormTitre
         '
@@ -554,8 +520,7 @@ Partial Class FrmControle
     Friend WithEvents pnlForm As Panel
     Friend WithEvents lblFormTitre As Label
     Friend WithEvents pnlOnglets As Panel
-    Friend WithEvents btnSortieMaint As Button
-    Friend WithEvents btnSortieMission As Button
+    Friend WithEvents btnOngletSortie As Button
     Friend WithEvents lbl2 As Label
     Friend WithEvents txtNumMission As TextBox
     Friend WithEvents lbl1 As Label
@@ -583,6 +548,5 @@ Partial Class FrmControle
     Friend WithEvents pnlJournal As Panel
     Friend WithEvents dgvJournal As DataGridView
     Friend WithEvents lblTitreJournal As Label
-    Friend WithEvents btnRetourMaint As Button
-    Friend WithEvents btnRetourMission As Button
+    Friend WithEvents btnOngletRetour As Button
 End Class

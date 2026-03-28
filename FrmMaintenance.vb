@@ -24,9 +24,7 @@ Public Class FrmMaintenance
         ChargerMaintenance("Toutes")
     End Sub
 
-    '─────────────────────────────────────────
     ' TRANSITIONS AUTOMATIQUES
-    '─────────────────────────────────────────
     Private Sub MettreAJourTransitionsAuto()
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
@@ -57,13 +55,11 @@ Public Class FrmMaintenance
 
             End Using
         Catch ex As Exception
-            ' Silencieux — transitions auto ne doivent pas bloquer
+
         End Try
     End Sub
 
-    '─────────────────────────────────────────
     ' Design
-    '─────────────────────────────────────────
     Private Sub AppliquerDesign()
         StylerGrille(dgvMaintenance)
         dtpEntree.Format = DateTimePickerFormat.Short
@@ -72,9 +68,7 @@ Public Class FrmMaintenance
         dtpSortie.Value = DateTime.Today.AddDays(3)
     End Sub
 
-    '─────────────────────────────────────────
     ' Charger données
-    '─────────────────────────────────────────
     Private Sub ChargerVehicules()
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
@@ -109,9 +103,7 @@ Public Class FrmMaintenance
         cboPrestataire.SelectedIndex = 0
     End Sub
 
-    '─────────────────────────────────────────
     ' Charger liste maintenance
-    '─────────────────────────────────────────
     Private Sub ChargerMaintenance(filtre As String)
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
@@ -174,9 +166,7 @@ Public Class FrmMaintenance
         Next
     End Sub
 
-    '─────────────────────────────────────────
     ' CRUD — Enregistrer (Ajout + Modification)
-    '─────────────────────────────────────────
     Private Sub btnEnregistrer_Click(sender As Object, e As EventArgs) Handles btnEnregistrer.Click
         If cboVehicule.SelectedValue Is Nothing OrElse txtNature.Text.Trim() = "" Then
             MessageBox.Show("Véhicule et Nature sont obligatoires.",
@@ -193,7 +183,7 @@ Public Class FrmMaintenance
         Dim cout As Integer = 0
         Integer.TryParse(txtCout.Text.Replace(" ", ""), cout)
 
-        '── MODE MODIFICATION
+        ' MODE MODIFICATION
         If btnEnregistrer.Tag IsNot Nothing AndAlso
            btnEnregistrer.Tag.ToString() = "modifier" Then
             Try
@@ -224,7 +214,7 @@ Public Class FrmMaintenance
             Exit Sub
         End If
 
-        '── MODE AJOUT
+        ' MODE AJOUT
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
                 Dim sql As String =
@@ -260,9 +250,7 @@ Public Class FrmMaintenance
         End Try
     End Sub
 
-    '─────────────────────────────────────────
     ' CRUD — Menu contextuel (clic droit)
-    '─────────────────────────────────────────
     Private Sub dgvMaintenance_MouseDown(sender As Object, e As MouseEventArgs) Handles dgvMaintenance.MouseDown
         If e.Button = MouseButtons.Right Then
             Dim info = dgvMaintenance.HitTest(e.X, e.Y)
@@ -365,9 +353,6 @@ Public Class FrmMaintenance
         End If
     End Sub
 
-    '─────────────────────────────────────────
-    ' Helpers
-    '─────────────────────────────────────────
     Private Sub ResetModeFormulaire()
         btnEnregistrer.Text = "✅ Enregistrer"
         btnEnregistrer.Tag = Nothing
@@ -385,9 +370,7 @@ Public Class FrmMaintenance
         dtpSortie.Value = DateTime.Today.AddDays(3)
     End Sub
 
-    '─────────────────────────────────────────
     ' Filtres
-    '─────────────────────────────────────────
     Private Sub btnFiltreAll_Click(sender As Object, e As EventArgs) Handles btnFiltreAll.Click
         _filtreActuel = "Toutes"
         ResetFiltres()

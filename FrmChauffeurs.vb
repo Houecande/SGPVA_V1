@@ -125,7 +125,7 @@ Public Class FrmChauffeurs
             Exit Sub
         End If
 
-        ' ── Mode Modification
+        ' Mode Modification
         If btnAjouter.Tag IsNot Nothing AndAlso btnAjouter.Tag.ToString() = "modifier" Then
             Try
                 Using conn As OleDbConnection = ConnexionDB.GetConnexion()
@@ -160,7 +160,7 @@ Public Class FrmChauffeurs
             Exit Sub
         End If
 
-        ' ── Mode Ajout (code existant)
+        ' Mode Ajout (code existant)
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
                 Dim sql As String =
@@ -257,9 +257,7 @@ Public Class FrmChauffeurs
         dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None
     End Sub
 
-    '─────────────────────────────────────────
     ' Clic droit — menu contextuel
-    '─────────────────────────────────────────
     Private _idChauffeurSelectionne As Integer = -1
 
     Private Sub dgvChauffeurs_MouseDown(sender As Object, e As MouseEventArgs) Handles dgvChauffeurs.MouseDown
@@ -272,9 +270,7 @@ Public Class FrmChauffeurs
         End If
     End Sub
 
-    '─────────────────────────────────────────
     ' Modifier
-    '─────────────────────────────────────────
     Private Sub mnuModifier_Click(sender As Object, e As EventArgs) Handles mnuModifier.Click
         If _idChauffeurSelectionne = -1 Then Exit Sub
 
@@ -308,9 +304,7 @@ Public Class FrmChauffeurs
         End Try
     End Sub
 
-    '─────────────────────────────────────────
     ' Changer statut
-    '─────────────────────────────────────────
     Private Sub mnuConge_Click(sender As Object, e As EventArgs) Handles mnuConge.Click
         ChangerStatutChauffeur("Conge", "mis en Congé")
     End Sub
@@ -343,9 +337,7 @@ Public Class FrmChauffeurs
         End If
     End Sub
 
-    '─────────────────────────────────────────
     ' Supprimer
-    '─────────────────────────────────────────
     Private Sub mnuSupprimer_Click(sender As Object, e As EventArgs) Handles mnuSupprimer.Click
         If _idChauffeurSelectionne = -1 Then Exit Sub
         Dim rep = MessageBox.Show("⚠️ Supprimer définitivement ce chauffeur ?",
