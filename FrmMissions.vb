@@ -201,40 +201,38 @@ Public Class FrmMissions
             End Try
             Exit Sub
         End If
-
-        ' MODE AJOUT
+        '── MODE AJOUT
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
                 Dim numMission As String = GenererNumeroMission(conn)
 
+                ' ── Test des valeurs avant insertion
+                Dim idVeh As Integer = CInt(cboVehicule.SelectedValue)
+                Dim idChauf As Integer = CInt(cboChauffeur.SelectedValue)
+                Dim dateDepart As DateTime = dtpDepart.Value
+                Dim dateRetour As DateTime = dtpRetour.Value
+
                 Dim sql As String =
-                "INSERT INTO T_Missions " &
-                "(numero_mission, service_demandeur, motif, destination, " &
-                "id_vehicule, id_chauffeur, date_depart_prevue, date_retour_prevue, statut) " &
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO T_Missions " &
+            "(numero_mission, service_demandeur, motif, destination, " &
+            "id_vehicule, id_chauffeur, date_depart_prevue, date_retour_prevue, statut) " &
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
                 Dim cmd As New OleDbCommand(sql, conn)
-                cmd.Parameters.AddWithValue("?", numMission)
-                cmd.Parameters.AddWithValue("?", cboService.Text)
-                cmd.Parameters.AddWithValue("?", txtMotif.Text)
-                cmd.Parameters.AddWithValue("?", txtDestination.Text)
-                cmd.Parameters.AddWithValue("?", CInt(cboVehicule.SelectedValue))
-                cmd.Parameters.AddWithValue("?", CInt(cboChauffeur.SelectedValue))
+                cmd.Parameters.Add(New OleDb.OleDbParameter("p1", OleDb.OleDbType.VarWChar) With {.Value = numMission})
+                cmd.Parameters.Add(New OleDb.OleDbParameter("p2", OleDb.OleDbType.VarWChar) With {.Value = cboService.Text})
+                cmd.Parameters.Add(New OleDb.OleDbParameter("p3", OleDb.OleDbType.VarWChar) With {.Value = txtMotif.Text})
+                cmd.Parameters.Add(New OleDb.OleDbParameter("p4", OleDb.OleDbType.VarWChar) With {.Value = txtDestination.Text})
+                cmd.Parameters.Add(New OleDb.OleDbParameter("p5", OleDb.OleDbType.Integer) With {.Value = idVeh})
+                cmd.Parameters.Add(New OleDb.OleDbParameter("p6", OleDb.OleDbType.Integer) With {.Value = idChauf})
+                cmd.Parameters.Add(New OleDb.OleDbParameter("p7", OleDb.OleDbType.DBTimeStamp) With {.Value = dateDepart})
+                cmd.Parameters.Add(New OleDb.OleDbParameter("p8", OleDb.OleDbType.DBTimeStamp) With {.Value = dateRetour})
+                cmd.Parameters.Add(New OleDb.OleDbParameter("p9", OleDb.OleDbType.VarWChar) With {.Value = "En_Attente"})
 
-                ' Dates typées correctement
-                Dim pDepart2 As New OleDb.OleDbParameter("?", OleDb.OleDbType.DBTimeStamp)
-                pDepart2.Value = dtpDepart.Value
-                cmd.Parameters.Add(pDepart2)
-
-                Dim pRetour2 As New OleDb.OleDbParameter("?", OleDb.OleDbType.DBTimeStamp)
-                pRetour2.Value = dtpRetour.Value
-                cmd.Parameters.Add(pRetour2)
-
-                cmd.Parameters.AddWithValue("?", "En_Attente")
                 cmd.ExecuteNonQuery()
 
                 MessageBox.Show("✅ Mission " & numMission & " créée !",
-                            "Mission créée", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        "Mission créée", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 txtMotif.Clear()
                 txtDestination.Clear()
                 ChargerVehiculesDispo()
@@ -242,8 +240,9 @@ Public Class FrmMissions
             End Using
 
         Catch ex As Exception
-            MessageBox.Show("Erreur création : " & ex.Message,
-                        "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Erreur création : " & ex.Message & vbNewLine &
+                    "Détail : " & ex.InnerException?.Message,
+                    "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
