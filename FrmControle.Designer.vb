@@ -22,6 +22,7 @@ Partial Class FrmControle
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnDeconnexion = New System.Windows.Forms.Button()
         Me.lblAgent = New System.Windows.Forms.Label()
@@ -58,6 +59,10 @@ Partial Class FrmControle
         Me.pnlJournal = New System.Windows.Forms.Panel()
         Me.dgvJournal = New System.Windows.Forms.DataGridView()
         Me.lblTitreJournal = New System.Windows.Forms.Label()
+        Me.menuContextCont = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.mnuModifier = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Separateur = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuSupprimer = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1.SuspendLayout()
         Me.pnlForm.SuspendLayout()
         Me.pnlOnglets.SuspendLayout()
@@ -65,6 +70,7 @@ Partial Class FrmControle
         Me.pnlResultat.SuspendLayout()
         Me.pnlJournal.SuspendLayout()
         CType(Me.dgvJournal, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.menuContextCont.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel1
@@ -463,6 +469,7 @@ Partial Class FrmControle
         Me.dgvJournal.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(18, Byte), Integer), CType(CType(25, Byte), Integer), CType(CType(55, Byte), Integer))
         Me.dgvJournal.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.dgvJournal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvJournal.ContextMenuStrip = Me.menuContextCont
         Me.dgvJournal.Location = New System.Drawing.Point(20, 55)
         Me.dgvJournal.Name = "dgvJournal"
         Me.dgvJournal.ReadOnly = True
@@ -481,6 +488,30 @@ Partial Class FrmControle
         Me.lblTitreJournal.Size = New System.Drawing.Size(144, 20)
         Me.lblTitreJournal.TabIndex = 0
         Me.lblTitreJournal.Text = "📋 Journal du Jour"
+        '
+        'menuContextCont
+        '
+        Me.menuContextCont.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuModifier, Me.Separateur, Me.mnuSupprimer})
+        Me.menuContextCont.Name = "menuContextCont"
+        Me.menuContextCont.Size = New System.Drawing.Size(165, 70)
+        '
+        'mnuModifier
+        '
+        Me.mnuModifier.Name = "mnuModifier"
+        Me.mnuModifier.Size = New System.Drawing.Size(180, 22)
+        Me.mnuModifier.Text = "✏️ Modifier"
+        '
+        'Separateur
+        '
+        Me.Separateur.Name = "Separateur"
+        Me.Separateur.Size = New System.Drawing.Size(180, 22)
+        Me.Separateur.Text = "───────────────"
+        '
+        'mnuSupprimer
+        '
+        Me.mnuSupprimer.Name = "mnuSupprimer"
+        Me.mnuSupprimer.Size = New System.Drawing.Size(180, 22)
+        Me.mnuSupprimer.Text = "🗑️ Supprimer"
         '
         'FrmControle
         '
@@ -509,6 +540,7 @@ Partial Class FrmControle
         Me.pnlJournal.ResumeLayout(False)
         Me.pnlJournal.PerformLayout()
         CType(Me.dgvJournal, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.menuContextCont.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -549,4 +581,8 @@ Partial Class FrmControle
     Friend WithEvents dgvJournal As DataGridView
     Friend WithEvents lblTitreJournal As Label
     Friend WithEvents btnOngletRetour As Button
+    Friend WithEvents menuContextCont As ContextMenuStrip
+    Friend WithEvents mnuModifier As ToolStripMenuItem
+    Friend WithEvents Separateur As ToolStripMenuItem
+    Friend WithEvents mnuSupprimer As ToolStripMenuItem
 End Class

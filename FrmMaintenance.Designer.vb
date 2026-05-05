@@ -439,7 +439,7 @@ Partial Class FrmMaintenance
         '
         Me.menuContextMaint.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuModifier, Me.mnuCloturerManuellement, Me.Séparateur, Me.mnuSupprimer})
         Me.menuContextMaint.Name = "menuContextMaint"
-        Me.menuContextMaint.Size = New System.Drawing.Size(213, 92)
+        Me.menuContextMaint.Size = New System.Drawing.Size(213, 114)
         '
         'mnuModifier
         '
@@ -457,7 +457,7 @@ Partial Class FrmMaintenance
         '
         Me.Séparateur.Name = "Séparateur"
         Me.Séparateur.Size = New System.Drawing.Size(212, 22)
-        Me.Séparateur.Text = "───"
+        Me.Séparateur.Text = "───────────────"
         '
         'mnuSupprimer
         '

@@ -411,7 +411,9 @@ Public Class FrmMaintenance
     End Sub
 
     Private Sub btnRetour_Click(sender As Object, e As EventArgs) Handles btnRetour.Click
-        Me.Close()
+        Dim frm As New FrmTableauBord(_idUser, _nom, _role)
+        frm.Show()
+        Me.Hide()
     End Sub
 
     Private Sub StylerGrille(dgv As DataGridView)

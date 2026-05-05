@@ -46,12 +46,6 @@ Partial Class FrmMissions
         Me.lblFormTitre = New System.Windows.Forms.Label()
         Me.pnlListeMissions = New System.Windows.Forms.Panel()
         Me.dgvMissions = New System.Windows.Forms.DataGridView()
-        Me.pnlFiltres = New System.Windows.Forms.Panel()
-        Me.btnFiltreTerminee = New System.Windows.Forms.Button()
-        Me.btnFiltreAttente = New System.Windows.Forms.Button()
-        Me.btnFiltreEnCours = New System.Windows.Forms.Button()
-        Me.btnFiltreAll = New System.Windows.Forms.Button()
-        Me.lblTitreListe = New System.Windows.Forms.Label()
         Me.menuContextMission = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.mnuModifierMission = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMettreEnAttente = New System.Windows.Forms.ToolStripMenuItem()
@@ -59,12 +53,18 @@ Partial Class FrmMissions
         Me.mnuAnnulerMission = New System.Windows.Forms.ToolStripMenuItem()
         Me.Séparateur = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuSupprimerMission = New System.Windows.Forms.ToolStripMenuItem()
+        Me.pnlFiltres = New System.Windows.Forms.Panel()
+        Me.btnFiltreTerminee = New System.Windows.Forms.Button()
+        Me.btnFiltreAttente = New System.Windows.Forms.Button()
+        Me.btnFiltreEnCours = New System.Windows.Forms.Button()
+        Me.btnFiltreAll = New System.Windows.Forms.Button()
+        Me.lblTitreListe = New System.Windows.Forms.Label()
         Me.pnlHautMissions.SuspendLayout()
         Me.pnlFormMission.SuspendLayout()
         Me.pnlListeMissions.SuspendLayout()
         CType(Me.dgvMissions, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pnlFiltres.SuspendLayout()
         Me.menuContextMission.SuspendLayout()
+        Me.pnlFiltres.SuspendLayout()
         Me.SuspendLayout()
         '
         'pnlHautMissions
@@ -347,6 +347,49 @@ Partial Class FrmMissions
         Me.dgvMissions.Size = New System.Drawing.Size(700, 500)
         Me.dgvMissions.TabIndex = 2
         '
+        'menuContextMission
+        '
+        Me.menuContextMission.BackColor = System.Drawing.SystemColors.Control
+        Me.menuContextMission.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuModifierMission, Me.mnuMettreEnAttente, Me.mnuValiderMission, Me.mnuAnnulerMission, Me.Séparateur, Me.mnuSupprimerMission})
+        Me.menuContextMission.Name = "menuContextMission"
+        Me.menuContextMission.Size = New System.Drawing.Size(208, 158)
+        '
+        'mnuModifierMission
+        '
+        Me.mnuModifierMission.Name = "mnuModifierMission"
+        Me.mnuModifierMission.Size = New System.Drawing.Size(207, 22)
+        Me.mnuModifierMission.Text = "✏️ Modifier cette mission"
+        '
+        'mnuMettreEnAttente
+        '
+        Me.mnuMettreEnAttente.Name = "mnuMettreEnAttente"
+        Me.mnuMettreEnAttente.Size = New System.Drawing.Size(207, 22)
+        Me.mnuMettreEnAttente.Text = "⏸️ Mettre en Attente"
+        '
+        'mnuValiderMission
+        '
+        Me.mnuValiderMission.Name = "mnuValiderMission"
+        Me.mnuValiderMission.Size = New System.Drawing.Size(207, 22)
+        Me.mnuValiderMission.Text = "✅ Valider la Mission"
+        '
+        'mnuAnnulerMission
+        '
+        Me.mnuAnnulerMission.Name = "mnuAnnulerMission"
+        Me.mnuAnnulerMission.Size = New System.Drawing.Size(207, 22)
+        Me.mnuAnnulerMission.Text = "❌ Annuler la Mission"
+        '
+        'Séparateur
+        '
+        Me.Séparateur.Name = "Séparateur"
+        Me.Séparateur.Size = New System.Drawing.Size(207, 22)
+        Me.Séparateur.Text = "───────────────"
+        '
+        'mnuSupprimerMission
+        '
+        Me.mnuSupprimerMission.Name = "mnuSupprimerMission"
+        Me.mnuSupprimerMission.Size = New System.Drawing.Size(207, 22)
+        Me.mnuSupprimerMission.Text = "🗑️ Supprimer"
+        '
         'pnlFiltres
         '
         Me.pnlFiltres.Controls.Add(Me.btnFiltreTerminee)
@@ -429,49 +472,6 @@ Partial Class FrmMissions
         Me.lblTitreListe.TabIndex = 0
         Me.lblTitreListe.Text = "📋 Liste des Missions"
         '
-        'menuContextMission
-        '
-        Me.menuContextMission.BackColor = System.Drawing.Color.FromArgb(CType(CType(18, Byte), Integer), CType(CType(25, Byte), Integer), CType(CType(55, Byte), Integer))
-        Me.menuContextMission.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuModifierMission, Me.mnuMettreEnAttente, Me.mnuValiderMission, Me.mnuAnnulerMission, Me.Séparateur, Me.mnuSupprimerMission})
-        Me.menuContextMission.Name = "menuContextMission"
-        Me.menuContextMission.Size = New System.Drawing.Size(208, 136)
-        '
-        'mnuModifierMission
-        '
-        Me.mnuModifierMission.Name = "mnuModifierMission"
-        Me.mnuModifierMission.Size = New System.Drawing.Size(207, 22)
-        Me.mnuModifierMission.Text = "✏️ Modifier cette mission"
-        '
-        'mnuMettreEnAttente
-        '
-        Me.mnuMettreEnAttente.Name = "mnuMettreEnAttente"
-        Me.mnuMettreEnAttente.Size = New System.Drawing.Size(207, 22)
-        Me.mnuMettreEnAttente.Text = "⏸️ Mettre en Attente"
-        '
-        'mnuValiderMission
-        '
-        Me.mnuValiderMission.Name = "mnuValiderMission"
-        Me.mnuValiderMission.Size = New System.Drawing.Size(207, 22)
-        Me.mnuValiderMission.Text = "✅ Valider la Mission"
-        '
-        'mnuAnnulerMission
-        '
-        Me.mnuAnnulerMission.Name = "mnuAnnulerMission"
-        Me.mnuAnnulerMission.Size = New System.Drawing.Size(207, 22)
-        Me.mnuAnnulerMission.Text = "❌ Annuler la Mission"
-        '
-        'Séparateur
-        '
-        Me.Séparateur.Name = "Séparateur"
-        Me.Séparateur.Size = New System.Drawing.Size(207, 22)
-        Me.Séparateur.Text = "───"
-        '
-        'mnuSupprimerMission
-        '
-        Me.mnuSupprimerMission.Name = "mnuSupprimerMission"
-        Me.mnuSupprimerMission.Size = New System.Drawing.Size(207, 22)
-        Me.mnuSupprimerMission.Text = "🗑️ Supprimer"
-        '
         'FrmMissions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -493,8 +493,8 @@ Partial Class FrmMissions
         Me.pnlListeMissions.ResumeLayout(False)
         Me.pnlListeMissions.PerformLayout()
         CType(Me.dgvMissions, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pnlFiltres.ResumeLayout(False)
         Me.menuContextMission.ResumeLayout(False)
+        Me.pnlFiltres.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

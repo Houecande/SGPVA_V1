@@ -190,7 +190,7 @@ Public Class FrmMissions
             Exit Sub
         End If
 
-        ' MODE AJOUT (ton code INSERT existant)
+        ' MODE AJOUT
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
                 Dim numMission As String = GenererNumeroMission(conn)
