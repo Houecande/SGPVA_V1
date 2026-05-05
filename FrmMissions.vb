@@ -164,17 +164,27 @@ Public Class FrmMissions
                     "id_vehicule=?, id_chauffeur=?, " &
                     "date_depart_prevue=?, date_retour_prevue=? " &
                     "WHERE numero_mission=?"
+
                     Dim cmd As New OleDbCommand(sql, conn)
                     cmd.Parameters.AddWithValue("?", cboService.Text)
                     cmd.Parameters.AddWithValue("?", txtMotif.Text)
                     cmd.Parameters.AddWithValue("?", txtDestination.Text)
                     cmd.Parameters.AddWithValue("?", CInt(cboVehicule.SelectedValue))
                     cmd.Parameters.AddWithValue("?", CInt(cboChauffeur.SelectedValue))
-                    cmd.Parameters.AddWithValue("?", dtpDepart.Value)
-                    cmd.Parameters.AddWithValue("?", dtpRetour.Value)
+
+                    ' Dates typées correctement
+                    Dim pDepart1 As New OleDb.OleDbParameter("?", OleDb.OleDbType.DBTimeStamp)
+                    pDepart1.Value = dtpDepart.Value
+                    cmd.Parameters.Add(pDepart1)
+
+                    Dim pRetour1 As New OleDb.OleDbParameter("?", OleDb.OleDbType.DBTimeStamp)
+                    pRetour1.Value = dtpRetour.Value
+                    cmd.Parameters.Add(pRetour1)
+
                     cmd.Parameters.AddWithValue("?", _numMissionSelectionne)
                     cmd.ExecuteNonQuery()
                 End Using
+
                 MessageBox.Show("✅ Mission modifiée avec succès !",
                             "Modifié", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 btnCreerMission.Text = "✅ Créer la Mission"
@@ -184,8 +194,10 @@ Public Class FrmMissions
                 txtMotif.Clear()
                 txtDestination.Clear()
                 ChargerMissions(_filtreActuel)
+
             Catch ex As Exception
-                MessageBox.Show("Erreur modification : " & ex.Message)
+                MessageBox.Show("Erreur modification : " & ex.Message,
+                            "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
             Exit Sub
         End If
@@ -194,11 +206,13 @@ Public Class FrmMissions
         Try
             Using conn As OleDbConnection = ConnexionDB.GetConnexion()
                 Dim numMission As String = GenererNumeroMission(conn)
+
                 Dim sql As String =
                 "INSERT INTO T_Missions " &
                 "(numero_mission, service_demandeur, motif, destination, " &
                 "id_vehicule, id_chauffeur, date_depart_prevue, date_retour_prevue, statut) " &
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
                 Dim cmd As New OleDbCommand(sql, conn)
                 cmd.Parameters.AddWithValue("?", numMission)
                 cmd.Parameters.AddWithValue("?", cboService.Text)
@@ -206,10 +220,19 @@ Public Class FrmMissions
                 cmd.Parameters.AddWithValue("?", txtDestination.Text)
                 cmd.Parameters.AddWithValue("?", CInt(cboVehicule.SelectedValue))
                 cmd.Parameters.AddWithValue("?", CInt(cboChauffeur.SelectedValue))
-                cmd.Parameters.AddWithValue("?", dtpDepart.Value)
-                cmd.Parameters.AddWithValue("?", dtpRetour.Value)
+
+                ' Dates typées correctement
+                Dim pDepart2 As New OleDb.OleDbParameter("?", OleDb.OleDbType.DBTimeStamp)
+                pDepart2.Value = dtpDepart.Value
+                cmd.Parameters.Add(pDepart2)
+
+                Dim pRetour2 As New OleDb.OleDbParameter("?", OleDb.OleDbType.DBTimeStamp)
+                pRetour2.Value = dtpRetour.Value
+                cmd.Parameters.Add(pRetour2)
+
                 cmd.Parameters.AddWithValue("?", "En_Attente")
                 cmd.ExecuteNonQuery()
+
                 MessageBox.Show("✅ Mission " & numMission & " créée !",
                             "Mission créée", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 txtMotif.Clear()
@@ -217,6 +240,7 @@ Public Class FrmMissions
                 ChargerVehiculesDispo()
                 ChargerMissions(_filtreActuel)
             End Using
+
         Catch ex As Exception
             MessageBox.Show("Erreur création : " & ex.Message,
                         "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
